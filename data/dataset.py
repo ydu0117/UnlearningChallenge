@@ -115,7 +115,7 @@ def build_dataset(root_path, batch_size, shuffle, mode):
 
     if mode == 'train':
         '''Get the dataset.'''
-        training_set = OurDataset(split='training', root_path=root_path)
+        training_set = OurDataset(split='train', root_path=root_path)
         val_set = OurDataset(split='val', root_path=root_path)
 
         train_loader = DataLoader(training_set, batch_size=batch_size, shuffle=shuffle)
