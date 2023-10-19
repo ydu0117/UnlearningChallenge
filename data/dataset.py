@@ -65,7 +65,8 @@ class OurDataset(Dataset):
             T.ToPILImage(),
             # T.Grayscale(num_output_channels=3),
             T.Resize((256, 256)),
-            T.ToTensor()
+            T.ToTensor(),
+            T.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
         ])
 
         df = pd.read_csv(os.path.join('./data', f'{split}.csv'))

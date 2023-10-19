@@ -35,7 +35,7 @@ def build_args():
     parser.add_argument('--log_path', default='./log/')
     parser.add_argument('--resume', default=False, type=str, help='path to the lastest checkpoint (default: none)')
     parser.add_argument('--basemodel', default='resnet18', help='resnet18')
-    parser.add_argument('--model_name', default='1810whole_UTK', help='mark')
+    parser.add_argument('--model_name', default='1910whole_UTK', help='mark')
     parser.add_argument('--batch_size', type=int, default=20, help='the mini-batch size of training')
     parser.add_argument('--epochs', type=int, default=60, help='the total number of training epoch')
     parser.add_argument('--lr', type=float, default=0.001, help='learning rate, default=0.005')
