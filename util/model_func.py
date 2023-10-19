@@ -36,8 +36,8 @@ def train(model, loader, root, epoch, device, optim, loss_fn, writer):
         pbar.set_description(f'Epoch: {epoch}, Loss: {loss:.4f}, Acc: {acc:.4f}')
 
         iter_count += labels.data.numel()
-        writer.add_scalar('Training loss (iteration)', loss.item(), iter_count)
-        writer.add_scalar('Training accuracy (iteration)', acc, iter_count)
+        writer.add_scalar('Training loss (iteration)', loss.item(), iter_count+epoch*len(loader.dataset))
+        writer.add_scalar('Training accuracy (iteration)', acc, iter_count+epoch*len(loader.dataset))
     pbar.close()
     # Record loss for each epoch
     writer.add_scalar('Training loss (epoch)', epoch_loss/len(loader), epoch)
@@ -74,8 +74,8 @@ def evaluate(model, loader, root, epoch, device, optim, loss_fn, writer):
 
             iter_count += labels.data.numel()
             # Record loss for each iteration
-            writer.add_scalar('Evaluation loss (iteration)', loss.item(), iter_count)
-            writer.add_scalar('Evaluation accuracy (iteration)', acc, iter_count)
+            writer.add_scalar('Evaluation loss (iteration)', loss.item(), iter_count+epoch*len(loader.dataset))
+            writer.add_scalar('Evaluation accuracy (iteration)', acc, iter_count+epoch*len(loader.dataset))
 
     # Record loss for each epoch
     writer.add_scalar('Evaluation loss (epoch)', epoch_loss/len(loader), epoch)

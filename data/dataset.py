@@ -63,13 +63,14 @@ class OurDataset(Dataset):
 
         self.transform = T.Compose([
             T.ToPILImage(),
+            # T.Grayscale(num_output_channels=3),
             T.Resize((256, 256)),
             T.ToTensor()
         ])
 
         df = pd.read_csv(os.path.join('./data', f'{split}.csv'))
         df['image_path'] = df['image_id'].apply(
-            lambda x: os.path.join(root_path, x.replace('\\', '/') + '.jpg'))
+            lambda x: os.path.join(root_path, x.replace('\\', '/')))
         df = df.sort_values(by='image_path')
 
         # Initialize counter and total attributes

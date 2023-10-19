@@ -30,14 +30,14 @@ def build_args():
     torch.cuda.manual_seed(SEED)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--root', default=Path(r'/remote/rds/groups/idcom_imaging/data/Face/imdb_crop'), help='/gbmormen')
+    parser.add_argument('--root', default=Path(r'/remote/rds/groups/idcom_imaging/data/Face/UTKFace'), help='/gbmormen')
     parser.add_argument('--mode', default='train', help='train|test')
     parser.add_argument('--log_path', default='./log/')
     parser.add_argument('--resume', default=False, type=str, help='path to the lastest checkpoint (default: none)')
     parser.add_argument('--basemodel', default='resnet18', help='resnet18')
-    parser.add_argument('--model_name', default='1810whole', help='mark')
+    parser.add_argument('--model_name', default='1810whole_UTK', help='mark')
     parser.add_argument('--batch_size', type=int, default=20, help='the mini-batch size of training')
-    parser.add_argument('--epochs', type=int, default=20, help='the total number of training epoch')
+    parser.add_argument('--epochs', type=int, default=60, help='the total number of training epoch')
     parser.add_argument('--lr', type=float, default=0.001, help='learning rate, default=0.005')
     parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
     parser.add_argument('--weight_decay', type=float, default=0, help='weight_decay for adam. default=0')
@@ -111,7 +111,7 @@ def main():
     train_loader, validation_loader, test_loader = build_dataset(root_path=opt.root, batch_size=opt.batch_size, shuffle=True, mode=opt.mode)
 
     # ============================ Training Stage =====================================
-    if opt.mode =='train':
+    if opt.mode =='train' or opt.mode =='retain':
         for epoch in range(opt.epochs):
 
             optim = adjust_learning_rate(optim, epoch, init_lr=opt.lr, lr_decay_epoch=10)
@@ -124,14 +124,14 @@ def main():
 
             is_best = epoch_val_acc > best_accu
             best_accu = max(epoch_val_acc, best_accu)
+            writer.add_scalar('best_accu', best_accu, epoch)
+
             if is_best:
                 torch.save(state, checkpoint_dir/f'model_best_epoch_{epoch}.pth')
                 print(f'Save checkpoint from epoch {epoch} as best model!!')
             if epoch % 5 == 0:
                 torch.save(state, checkpoint_dir/f'checkpoint_{epoch}.pth')
                 print(f'Save checkpoint from epoch {epoch} !!')
-
-
     # ============================ Testing Stage =====================================
     elif opt.mode =='test':
         for epoch in range(opt.epochs):
